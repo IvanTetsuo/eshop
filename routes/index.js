@@ -3,7 +3,7 @@ const router = new Router();
 const apiRouter = require('./api');
 const path = require('path');
 
-router.use('/api/', apiRouter);
+router.use('/api', apiRouter);
 
 router.get('/', function (req, res) {
     res.render('index', {a:5});

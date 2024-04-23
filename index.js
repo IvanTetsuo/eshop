@@ -4,9 +4,11 @@ const app = express();
 const port = process.env.PORT || 3000;
 const mainRouter = require('./routes');
 const mongoose = require('mongoose');
+const morgan = require('morgan');
 
 mongoose.connect(process.env.MONGODB_CONNECTION_URI);
 app.set('view engine', 'ejs');
+app.use(morgan());
 app.use(express.json()); //это для того чтобы распарсить json (в body)
 app.use(express.urlencoded({ extended: true })); //это для того чтобы распарсить url encoded (тоже в body)
 app.use(express.static(__dirname + '/public'));

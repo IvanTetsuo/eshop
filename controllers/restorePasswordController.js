@@ -1,8 +1,8 @@
 const mailer = require('../mailer/nodemailer');
 const Admin = require('../models/Admin');
 const RestoreToken = require('../models/RestoreToken');
-const crypto = require('crypto');
 const bcrypt = require('bcrypt');
+const {randomTokenString} = require('../utils/auth');
 
 class RestorePasswordController {
     async sendRestorePasswordEmail(req, res) {
@@ -58,10 +58,6 @@ class RestorePasswordController {
             res.status(400).json({error: 'woops'});
         }
     }
-}
-
-function randomTokenString() {
-    return crypto.randomBytes(40).toString('hex');
 }
 
 module.exports = new RestorePasswordController();
