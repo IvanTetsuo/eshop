@@ -53,6 +53,96 @@ class ItemController {
         }
     }
     
+    async getItem(req, res) {
+        try {
+            const itemId = req.params.itemId;
+            if (!itemId) {
+                return res.status(400).json({message: 'woops'});
+            }
+            const item = await Item.findById(itemId);
+            res.json(item);
+        } catch(err) {
+            res.status(400).json({message: 'woops'});
+        }
+    }
+
+    async deleteItem(req, res) {
+        try {
+            const itemId = req.params.itemId;
+            if (!itemId) {
+                return res.status(400).json({message: 'woops'});
+            }
+            const item = await Item.findById(itemId);
+            if (!item) {
+                return res.status(404).json({message: 'not found'});
+            }
+            // удалена 57-я строка из референса
+            await Item.deleteOne({_id: item._id});
+            res.json({message: 'item удалён'});
+        } catch(err) {
+            res.status(400).json({message: 'woops'});
+        }
+    }
+
+    async updateItem(req, res) {
+        try {
+            const itemId = req.params.itemId;
+            if (!itemId) {
+                return res.status(400).json({message: 'woops'});
+            }
+            const item = await Item.findById(itemId);
+            if (!item) {
+                return res.status(404).json({message: 'not found'});
+            }
+            //78-я удалена
+            const {
+                name,
+                category,
+                price,
+                series,
+                stock, //остаток товаров на складе
+                discount, //скидка
+                description,
+                images,
+                size,
+            } = req.body;
+            // if (!title && !text) {
+            //     return res.status(400).json({message: 'статья не найдена'});
+            // }
+            if (name) {
+                item.name = name;
+            }
+            if (category) {
+                item.category = category;
+            }
+            if (price) {
+                item.price = price;
+            }
+            if (series) {
+                item.series = series;
+            }
+            if (stock) {
+                item.stock = stock;
+            }
+            if (discount) {
+                item.discount = discount;
+            }
+            if (description) {
+                item.description = description;
+            }
+            if (images) {
+                item.images = images;
+            }
+            if (size) {
+                item.size = size;
+            }
+            await item.save();
+            res.json({updatedItem: item});
+        } catch(err) {
+            console.log(err);
+            res.status(400).json({message: 'woops'});
+        }
+    }
 }
 
 module.exports = new ItemController();
